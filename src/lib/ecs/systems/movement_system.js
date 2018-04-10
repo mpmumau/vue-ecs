@@ -8,7 +8,20 @@ export default function(ecs) {
     movementSystem.tick = function(delta, eid, componentBundle) {
         let transformComponent = componentBundle.get(MaskUtils.Masks.TransformComponent);
 
-        //transformComponent.x -= delta * 0.001;
+    // transform_component.horizontalRate = (Math.random() / 100) + 0.025;
+    // transform_component.isFlipped = false;
+    // transform_component.horizontalExtent = Math.floor(Math.random() * 20);
+    // transform_component.horizontalOffset = 0;
+
+        if (transformComponent.horizontalOffset >= transformComponent.horizontalExtent) {
+            transformComponent.horizontalOffset = 0;
+            transformComponent.isFlipped = !transformComponent.isFlipped;
+        }
+
+        let xTraveled = 0.5 * delta * transformComponent.horizontalRate * (transformComponent.isFlipped ? -1 : 1);
+        transformComponent.horizontalOffset += Math.abs(xTraveled);
+
+        transformComponent.x += xTraveled;
         transformComponent.y += delta * transformComponent.rate;
 
         if (transformComponent.y > 768)

@@ -4,7 +4,7 @@
             Amount of entities: {{ entityAmt }}
         </div>
         <div class="scene-wrapper">
-            <Entity v-for="(entity, id) in this.entities" :data-eid="entity.eid" :key="id" :styleobj="entity.style" :eid="entity.eid" :entitydata="entity">
+            <Entity v-for="(entity, id) in this.entities" :data-eid="entity.eid" :key="entity.eid" :styleobj="entity.style" :eid="entity.eid" :entitydata="entity">
                 ENTITY
             </Entity>
         </div>

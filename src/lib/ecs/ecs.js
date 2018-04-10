@@ -2,14 +2,10 @@ import EntityManager from './entity_manager'
 import ComponentManager from './component_manager'
 import SystemManager from './system_manager'
 
-/* tmp */
-import StyleSystem from './systems/style_system'
-import MessagingSystem from './systems/messaging_system'
-import MovementSystem from './systems/movement_system'
-/* end tmp*/
-
-export default function() {
+export default function(initializer) {
     return {
+        initializer: initializer,
+
         store: null,
         maxEntities: 32768,
 
@@ -26,10 +22,6 @@ export default function() {
         componentManager: null,
         systemManager: null,
 
-        tmpInit() {
-
-        },
-
         init(store) {
             if (this.isInit)
                 return;
@@ -37,23 +29,17 @@ export default function() {
 
             this.store = store.a; // Why?!?
 
-            /* Set up objects */
             this.entityManager = new EntityManager(this.maxEntities);
             
             this.componentManager = new ComponentManager(this.maxEntities, this.entityManager);
             this.entityManager.setComponentManager(this.componentManager);
             
             this.systemManager = new SystemManager(this.entityManager, this.componentManager);
-
-            /* Set up systems */
-            let messagingSystem = new MessagingSystem(this);
-            this.systemManager.addSystem(messagingSystem);
-
-            let movementSystem = new MovementSystem(this);
-            this.systemManager.addSystem(movementSystem);
-
-            let styleSystem = new StyleSystem(this);
-            this.systemManager.addSystem(styleSystem);
+            for (let s = 0; s < this.initializer.systems.length; s++) {
+                let system = this.initializer.systems[s];
+                system.ecs = this;
+                this.systemManager.addSystem(system);
+            }
 
             /* Misc. */
             this.running = true;

@@ -11,5 +11,10 @@ export default () => {
 
     transform_component.rate = (Math.random() / 10) + 0.025;
 
+    transform_component.horizontalRate = (Math.random() / 100) + 0.025;
+    transform_component.isFlipped = false;
+    transform_component.horizontalExtent = Math.floor(Math.random() * 100) + 25;
+    transform_component.horizontalOffset = 0;
+
     return transform_component;
 }
